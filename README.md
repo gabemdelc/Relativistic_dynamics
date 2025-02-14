@@ -1,8 +1,11 @@
 Relativistic Dynamics and Cosmological Expansion
+![relativistic_dynamics](https://github.com/user-attachments/assets/ae050032-f25f-45aa-acc9-33dd58bf95ee)
+
 📌 Description
 
 This repository explores relativistic dynamics and its role in the accelerated expansion of the universe. We propose an alternative explanation that does not require dark energy, focusing instead on the cyclic conversion between matter, energy, and temperature.
 🔬 Abstract
+![Uploading relativistic_dynamics.png…]()
 
 Relativistic dynamics describes the behavior of matter and energy under the principles of special and general relativity.
 This project investigates how cosmic acceleration can be understood as a result of the mass-energy-temperature cycle, without invoking exotic dark energy.
