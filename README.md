@@ -1,6 +1,10 @@
 Relativistic Dynamics and Cosmological Expansion
 ![relativistic_dynamics](https://github.com/user-attachments/assets/ae050032-f25f-45aa-acc9-33dd58bf95ee)
 
+📌 Run this Jupyter Notebook online:  
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/gabemdelc/Relativistic_dynamics/HEAD?urlpath=%2Fdoc%2Ftree%2FRelativistic_Dynamics.ipynb)
+
+
 📌 Description
 
 This repository explores relativistic dynamics and its role in the accelerated expansion of the universe. We propose an alternative explanation that does not require dark energy, focusing instead on the cyclic conversion between matter, energy, and temperature.
