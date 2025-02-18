@@ -1,5 +1,4 @@
 Relativistic Dynamics and Cosmological Expansion
-![relativistic_dynamics](https://github.com/user-attachments/assets/ae050032-f25f-45aa-acc9-33dd58bf95ee)
 
 📌 ## Ejecutar en Google Colab
 
