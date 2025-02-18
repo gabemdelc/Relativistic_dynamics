@@ -1,8 +1,10 @@
 Relativistic Dynamics and Cosmological Expansion
 ![relativistic_dynamics](https://github.com/user-attachments/assets/ae050032-f25f-45aa-acc9-33dd58bf95ee)
 
-📌 Run this Jupyter Notebook online:  
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/gabemdelc/Relativistic_dynamics/HEAD?urlpath=%2Fdoc%2Ftree%2FRelativistic_Dynamics.ipynb)
+📌 ## Ejecutar en Google Colab
+
+[![open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/gabemdelc/Relativistic_dynamics/blob/main/code/relative%20dynamic.ipynb)
+
 
 
 📌 Description
