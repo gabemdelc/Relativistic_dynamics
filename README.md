@@ -39,9 +39,9 @@ git clone https://github.com/gabemdelc/Relativistic_dynamics.git
 
 Open the Jupyter Notebook:
 
-    jupyter notebook Relativistic_Dynamics.ipynb
+[    jupyter notebook Relativistic_Dynamics.ipynb
 
-    Run the simulations and analyze the plots.
+    Run the simulations and analyze the plots.](https://colab.research.google.com/drive/1-yIOIqZMPOoL2pTN4Ug5c7z7guDQA60l?usp=sharing)
 
 📜 License
 
