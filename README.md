@@ -29,7 +29,8 @@ This project investigates how cosmic acceleration can be understood as a result 
 
     Jupyter Notebook with code for simulations and visualizations.
     Data sourced from SCPUnion2 supernova dataset. "Amanullah et al. (The Supernova Cosmology Project), Ap.J., 2010."
-  # Downloaded from: https://www.supernova.lbl.gov/Union/figures/SCPUnion2_mu_vs_z.txt
+    Downloaded from: https://www.supernova.lbl.gov/Union/figures/SCPUnion2_mu_vs_z.txt
+    
     Implementations of Friedmann equations for comparative analysis.
 
 📌 How to Use
@@ -38,11 +39,9 @@ This project investigates how cosmic acceleration can be understood as a result 
 
 git clone https://github.com/gabemdelc/Relativistic_dynamics.git
 
-Open the Jupyter Notebook:
+Run the simulations and analyze the plots
 
-[    jupyter notebook Relativistic_Dynamics.ipynb
-
-    Run the simulations and analyze the plots.](https://colab.research.google.com/drive/1-yIOIqZMPOoL2pTN4Ug5c7z7guDQA60l?usp=sharing)
+https://colab.research.google.com/drive/1-yIOIqZMPOoL2pTN4Ug5c7z7guDQA60l?usp=sharing)
 
 📜 License
 
