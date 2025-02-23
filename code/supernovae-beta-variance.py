@@ -1,3 +1,65 @@
+# coding=utf-8
+###################################################################################
+##
+# Author:      gabemdelc@gmail.com
+# Created:     18/Feb/2025
+# Copyright:   (c) Gabriel Martin del Campo Flores
+# License:     MIT License
+# -------------------------------------------------------------------------------
+# Abstract:
+# Relativistic dynamics describes the behavior of matter and energy under the principles of
+# special and general relativity. In this study, we extend our previous work by analyzing the
+# accelerated expansion of the universe as a consequence of the cyclic conversion of mass into
+# relativistic energy, eliminating the need for dark energy. Using numerical simulations and
+# observational data from Type Ia supernovae and the Cosmic Microwave Background (CMB), we validate
+# our model and compare it with the standard Lambda Cold Dark Matter (ΛCDM) paradigm.
+# Our results indicate that the relativistic dynamics model provides an excellent fit to supernova
+# data and captures key features of the CMB power spectrum, suggesting that relativistic corrections
+# alone can account for the observed expansion of the universe.
+#
+# Description of the Program:
+# This Python program processes observational data from the CMB, specifically from Planck and
+# WMAP datasets, and compares it to theoretical predictions from:
+# 1. The Standard ΛCDM Model – The conventional cosmological framework, based on the Friedmann equations.
+# 2. The Relativistic Dynamics Model – A modified version of the Friedmann equations,
+#    incorporating relativistic energy corrections as an alternative to dark energy.
+#
+# Features of the Program:
+# ✅ Loads observational CMB power spectrum data from an external dataset.
+# ✅ Computes theoretical power spectra for both ΛCDM and Relativistic Dynamics models.
+# ✅ Calculates statistical goodness-of-fit metrics:
+#    - Chi-Squared (χ²) – Measures how well the models fit the observational data.
+#    - Mean Squared Error (MSE) – Quantifies the average deviation of the models.
+# ✅ Generates comparison plots to visualize the accuracy of each model.
+# ✅ Outputs results in a structured table for further analysis.
+#
+# Methodology:
+# 1. Load Observational CMB Data
+#    - Extracts multipole moments (l) and observed power spectrum (C_l) from a dataset (Planck/WMAP).
+# 2. Compute Theoretical Power Spectra
+#    - ΛCDM Model: Uses a standard power-law approximation with exponential suppression at high l.
+#    - Relativistic Dynamics Model: Introduces a correction factor to account for relativistic interactions.
+# 3. Statistical Comparison
+#    - Computes χ² and MSE for both models to quantify their agreement with observational data.
+# 4. Graphical Representation
+#    - Plots observational data alongside the ΛCDM and Relativistic Dynamics models for visual comparison.
+#
+# Implications:
+# The results suggest that relativistic corrections alone may be sufficient to explain the universe’s
+# accelerated expansion, without requiring dark energy. This offers a new perspective on fundamental
+# cosmology and may open avenues for further theoretical and observational studies.
+#
+# Next Steps:
+# - Extend the analysis to supernova data (SCP Union, Pantheon datasets).
+# - Compare with Large-Scale Structure (LSS) surveys such as SDSS and DESI.
+# - Optimize model parameters to further reduce χ² discrepancies.
+#
+# This program provides a robust framework for testing alternative cosmological models and
+# evaluating the necessity of dark energy.
+###################################################################################
+# This program Compare data from Supernovae Tipe Ia, using 
+# === PARAMETER VALUES FOR COMPARISON === beta_original = 0.1 vs  beta_CMB = 2e-6  # Best fit value from CMB analysis
+######################################################################################3
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
