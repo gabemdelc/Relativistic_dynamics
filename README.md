@@ -1,72 +1,118 @@
-Relativistic Dynamics and Cosmological Expansion
+# 🌌 Relativistic Dynamics — The DK-RD2 Cosmological Model
 
-📌 ## Ejecutar en Google Colab
+Welcome to the official repository of **DK-RD2** — a revolutionary cosmological framework that explains the accelerated expansion of the universe without invoking dark energy or dark matter.
 
-[![open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/gabemdelc/Relativistic_dynamics/blob/main/code/relative%20dynamic.ipynb)
+---
 
-![Relativistic Dynamics and Cosmological Expansion](https://raw.githubusercontent.com/gabemdelc/Relativistic_dynamics/main/relativistic_dynamics.png)
+## 🧠 For Humans (Not Just Physicists)
 
+### What is DK-RD2?
 
-📌 ## Ejecutar en Google Colab
+DK-RD2 is a new way to understand the universe.
 
-[![open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/gabemdelc/Relativistic_dynamics/blob/main/code/teoric_g_model.ipynb)
+Instead of imagining mysterious invisible stuff to explain the motion of galaxies, DK-RD2 changes the rules of gravity itself. It asks:
 
+> ❓ What if gravity changes depending on temperature and motion?
 
-![Variation of G_eff with Temperature and Velocity](https://github.com/user-attachments/assets/22fa188c-254f-44f4-8fba-52db4a5e8bc4)
-![Comparison with Supernovae Type Ia Observational Data vs ΛCDM vs Relativistic Dynamics Model](https://github.com/user-attachments/assets/15244840-9fd4-4df4-bde5-f329c4c53c79)
-![Comparison with Cosmic Microwave Background (CMB) Observational Data vs ΛCDM andRelativistic Dynamics Model](https://github.com/user-attachments/assets/fbec0dea-5079-4039-bb93-c1109dc074b6)
+The result is **Gab(T, v)** — a new kind of gravitational interaction that evolves with the universe.
 
+---
 
+### Why does it matter?
 
+Because DK-RD2 **reproduces real observations** without inventing exotic forces. It explains:
 
-📌 Description
+- Supernovae data (how far things are)
+- CMB power spectrum (how early the universe looked)
+- Gravitational lensing (how light bends)
+- Galaxy distribution (where stuff clusters)
 
-This repository explores relativistic dynamics and its role in the accelerated expansion of the universe. We propose an alternative explanation that does not require dark energy, focusing instead on the cyclic conversion between matter, energy, and temperature.
-🔬 Abstract
+It does all this **with no free parameters** — just physics, the way it should be.
 
-Relativistic dynamics describes the behavior of matter and energy under the principles of special and general relativity.
-This project investigates how cosmic acceleration can be understood as a result of the mass-energy-temperature cycle, without invoking exotic dark energy.
+## 🪦 What happened to ΛCDM?
 
-📌 Final Conclusion
+> “The model was useful… until the ‘cosmetic’ constant replaced true physics.”  
+> RIP ΛCDM (1998–2025)
 
-THIS WORK NOT ONLY PROVIDES A MATHEMATICALLY ROBUST ALTERNATIVE TO DARK ENERGY BUT ALSO PROPOSES A NEW WAY OF UNDERSTANDING THE EXPANSION OF THE UNIVERSE. 
-IF FUTURE STUDIES CONFIRM THIS HYPOTHESIS, IT COULD REPRESENT A PARADIGM SHIFT IN MODERN COSMOLOGY, 
-SUGGESTING THAT THE UNIVERSE'S ACCELERATED GROWTH IS MERELY A MANIFESTATION OF THE EVOLUTION OF MATTER AND ENERGY WITHIN THE FRAMEWORK OF RELATIVITY, 
-WITHOUT THE NEED TO INVOKE UNKNOWN FORCES OR COMPONENTS.
+![ΛCDM Tombstone](DK-RD2/evidence/rip_lcdm.png)
 
-🔹 Standard Lambda Cold Dark Matter (ΛCDM) Model
+> *Run it. If your universe crashes… call me.*  
+> — GabE=mc²
 
-    The conventional ΛCDM model assumes that dark energy acts as a cosmological constant, driving the accelerated expansion.
-    This model is widely accepted but lacks direct observational evidence for dark energy.
+---
 
-🔹 Modified Friedmann Model
+## 🚀 Want to try it?
 
-    We introduce friedmann_relativistic_dynamics, an alternative formulation of the Friedmann equation.
-    This model includes an additional parameter (alpha) to account for deviations from the standard ΛCDM model.
-    The hypothesis suggests that mass-energy conversion at relativistic velocities contributes to the observed acceleration of the universe.
+You can run the full model locally or on Google Colab:
 
-📂 Contents
+- ▶️ **[Open in Google Colab](https://colab.research.google.com/github/gabemdelc/Relativistic_dynamics/blob/main/DK-RD2/DK-RD2.ipynb)**  
+- 💾 **[Browse the code in `DK-RD2/`](DK-RD2/)**
 
-    Jupyter Notebook with code for simulations and visualizations.
-    Data sourced from SCPUnion2 supernova dataset. "Amanullah et al. (The Supernova Cosmology Project), Ap.J., 2010."
-    Downloaded from: https://www.supernova.lbl.gov/Union/figures/SCPUnion2_mu_vs_z.txt
-    
-    Implementations of Friedmann equations for comparative analysis.
+It generates:
+- All scientific plots
+- Chi² and MSE stats
+- Emergent dark matter maps
+- RIP summary of ΛCDM 🚬
 
-📌 How to Use
+---
 
-    Clone the repository:
+## 💡 Key Figures  
+Each figure below is auto-generated by `DK-RD2.py` using real cosmological data.  
+You can regenerate them by executing the model.
 
-git clone https://github.com/gabemdelc/Relativistic_dynamics.git
-📌 ## Ejecutar en Google Colab Relativistic Dynamics and Cosmological Expansion
-[![open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/gabemdelc/Relativistic_dynamics/blob/main/code/relative%20dynamic.ipynb)
-📌 ## Ejecutar en Google Colab Variation of G_eff with Temperature and Velocity & Comparison with Supernovae Type Ia Observational Data & with Cosmic Microwave Background (CMB)
-[![open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/gabemdelc/Relativistic_dynamics/blob/main/code/teoric_g_model.ipynb)
+---
 
-Run the simulations and analyze the plots
+## ❤️ Support the Model
 
-https://colab.research.google.com/drive/1-yIOIqZMPOoL2pTN4Ug5c7z7guDQA60l?usp=sharing)
+If you're a physicist, data analyst, or science communicator, you're welcome to fork, test, question, or collaborate.
 
-📜 License
+If you're a journalist, teacher, or student: **this is open science**. You're part of it.
 
-MIT License - Free to use, modify, and distribute.
+> 💚 “Because we don’t need to invent the dark. We just needed to understand the light.”  
+> Physics is not invented — it's verified.  
+> — **GabE=mc² & Luludns = ∞Ψ**
+
+## 🧠 Want to use the model in your own work?
+
+You have two options:
+
+1. 🧩 **Use only the core engine:**  
+   Import the standalone `DK_RD2_core.py` into your own analysis pipeline.  
+   It contains all the physical functions needed to compute Gab(T, v), H(z), μ(z), distances, and more — ready to use with **any real cosmological dataset** (Union2, Pantheon+, Planck, DESI...).
+
+2. 📈 **Reproduce our figures and results:**  
+   Run the full `DK-RD2.py` script to generate all plots, comparisons, and data used in our study.
+
+The full scientific explanation of the model is available in:
+
+📄 [`documents/DK-RD2_PhysicalReview_Submission_Apr2025.pdf`](documents/DK-RD2_PhysicalReview_Submission_Apr2025.pdf)
+
+This includes:
+- Theoretical derivation of DK-RD2
+- Equations and dynamic gravity corrections
+- Comparison to ΛCDM
+- Full set of cosmological validations and figures
+
+---
+
+## 🕒 License
+
+This work is shared under the **MIT License** — feel free to use, adapt, or expand it with attribution.
+
+---
+
+## 📁 What's inside
+
+### Repository Structure
+
+```plaintext
+Relativistic_dynamics/
+├── DK-RD2/               # Validated DK-RD2 model
+│   ├── DK-RD2.py         # Main execution file
+│   ├── DK-RD2_core.py    # Core Utilities – Constants, Functions, and Dynamic Gravitational Engine
+│   ├── documents/        # Formal PDF submission of the DK-RD2 model (Physical Review 2025)
+│   ├── evidence/         # Output plots and CSVs
+│   ├── data/             # Public datasets (SN, CMB)
+├── legacy_models/        # Archived previous versions
+│   └── ...               # Older scripts and notebooks
+└── README.md             # This file
