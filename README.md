@@ -85,7 +85,7 @@ You have two options:
 
 The full scientific explanation of the model is available in:
 
-📄 [`documents/DK-RD2_PhysicalReview_Submission_Apr2025.pdf`](documents/DK-RD2_PhysicalReview_Submission_Apr2025.pdf)
+📄 [`DK-RD2/documents/DK-RD2_PhysicalReview_Submission_Apr2025.pdf`](DK-RD2/documents/DK-RD2_PhysicalReview_Submission_Apr2025.pdf)
 
 This includes:
 - Theoretical derivation of DK-RD2
