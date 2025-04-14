@@ -52,9 +52,13 @@ Requires: DK_RD2_Core.py Relativistic Dynamics Toolkit for the DK-RD2 Model
           in the same directory or accessible path.
 """
 
+import matplotlib.pyplot as plt
 from matplotlib import colors as mcolors
 import matplotlib.image as mpimg
+import pandas as pd
+
 from DK_RD2_Core import * # DK-RD2 Core Utilities – Constants, Functions, and Relativistic Dynamic Gravitational Engine
+
 
 def generate_figure01():
     """
@@ -653,149 +657,89 @@ def generate_global_summary(g_stats_sn, g_stats_cmb, g_stats_dm):
 
     return summary_image, summary_csv
 
-def load_and_compare_Hz_dataset(path, model_function, output_csv="evidence/rdm_Hz_comparison.csv", H0=70.0):
-    df = pd.read_csv(path, comment='#')
-    z = df["z"].values
-    Hz_obs = df["Hz"].values
-    Hz_err = df["Hz_err"].values
+def optimized_Hz_comparison(
+    data_path,
+    output_csv,
+    plot_path,
+    model_function=None
+):
+    """
+    Unified function to:
+    1. Load Hubble parameter observations
+    2. Compare to DK-RD2 model predictions
+    3. Save CSV with model vs observations
+    4. Generate and save plot
 
-    Hz_model = Hz_from_model(z, model_function, Hubble=H0)
-    chi2, mse = calculate_chi2_Hz(Hz_obs, Hz_err, Hz_model)
+    Parameters:
+    - data_path: path to observational CSV file
+    - output_csv: path to save comparison CSV
+    - plot_path: path to save plot image
+    - model_function: DK-RD2 model function E(z)
+    - H0: Hubble constant
+    """
+    # Load data
+    df = pd.read_csv(data_path, sep=",", comment="#")
+    df.columns = [c.strip() for c in df.columns]
 
-    # Save results with labels
+    # Robust name handling
+    try:
+        z = df["z"].astype(float).values
+        Hz_obs = df["Hz"].astype(float).values
+        Hz_err = df["Hz_err"].astype(float).values
+    except KeyError:
+        z = df["Redshift (z)"].astype(float).values
+        Hz_obs = df["Hubble Parameter H(z) (km/s/Mpc)"].astype(float).values
+        Hz_err = df["Uncertainty σH (km/s/Mpc)"].astype(float).values
+
+    # Model predictions
+    Hz_model = Hubble_H0 * model_function(z)
+    residual = Hz_obs - Hz_model
+    chi2 = np.sum((residual / Hz_err) ** 2)
+    mse = np.mean(residual ** 2)
+
+    # Save comparison table
     comparison_df = pd.DataFrame({
         "z": z,
         "Hz_obs": Hz_obs,
         "Hz_err": Hz_err,
         "Hz_model": Hz_model,
-        "residual": Hz_obs - Hz_model
+        "residual": residual
     })
 
+    # Append summary statistics for model comparison
+    # These rows store global chi-squared and mean squared error (MSE) metrics
+    # They are added to the end of the H(z) comparison table for easy export and analysis
+    # np.nan is used for non-applicable fields to preserve column structure and avoid future warnings
     metrics_df = pd.DataFrame({
-        "z": ["chi2_total", "mse_total"],
-        "Hz_obs": [chi2, mse],
-        "Hz_err": [None, None],
-        "Hz_model": [None, None],
-        "residual": [None, None]
+        "z": ["chi2_total", "mse_total"],  # Labels to indicate global statistical metrics
+        "Hz_obs": [chi2, mse],  # Values of χ² and MSE from the model fit to H(z) data
+        "Hz_err": [np.nan, np.nan],  # Not applicable for statistical rows
+        "Hz_model": [np.nan, np.nan],  # Not applicable for statistical rows
+        "residual": [np.nan, np.nan]  # Not applicable for statistical rows
     })
 
     combined_df = pd.concat([comparison_df, metrics_df], ignore_index=True)
+    os.makedirs(os.path.dirname(output_csv), exist_ok=True)
     combined_df.to_csv(output_csv, index=False)
-    print(f"Saved H(z) comparison to {output_csv}")
+    print(f"[✓] Saved CSV to {output_csv}")
 
-def plot_Hz_comparison(csv_path="evidence/rdm_Hz_comparison.csv", save_image=True):
-    df = pd.read_csv(csv_path)
-    df_numeric = df[pd.to_numeric(df["z"], errors="coerce").notnull()]
-    z = df_numeric["z"].astype(float)
-    Hz_obs = df_numeric["Hz_obs"].astype(float)
-    Hz_err = df_numeric["Hz_err"].astype(float)
-    Hz_model = df_numeric["Hz_model"].astype(float)
-
-    # Plot
-    plt.figure(figsize=(10, 6))
-    plt.errorbar(z, Hz_obs, yerr=Hz_err, fmt='o', label="Observed H(z)", alpha=0.4)
+    # Plotting
+    plt.figure("Expansion History H(z)", figsize=(10, 6))
+    plt.errorbar(z, Hz_obs, yerr=Hz_err, fmt='o', label="Observed H(z)", alpha=0.6)
     plt.plot(z, Hz_model, 'r-', label="Model DK-RD2", linewidth=2)
     plt.xlabel("Redshift z")
     plt.ylabel("H(z) [km/s/Mpc]")
-    plt.title("Expansion History H(z) vs DK-RD2 Model")
-    plt.legend()
-    if save_image:
-        plt.savefig("evidence/rdm_Hz_fit.png", dpi=300)
-    plt.show()
-
-def compare_Hz_data_if_needed(path_data="evidence/Hubble_Hz_data.csv",
-                               path_csv="evidence/rdm_Hz_comparison.csv",
-                               model_function=None,
-                               H0=70.0):
-    if not os.path.exists(path_csv):
-        print("H(z) CSV not found. Generating...")
-        load_and_compare_Hz_dataset(
-            path=path_data,
-            model_function=model_function,
-            output_csv=path_csv,
-            H0=H0
-        )
-    else:
-        print("H(z) CSV already exists. Generating plot.")
-    plot_Hz_comparison(csv_path=path_csv)
-
-def load_and_compare_Hz_observations(
-    path="data/hubble_observations.csv",
-    model_function=None,
-    output_csv="evidence/rdm_Hz_comparison.csv",
-    H0=70.0
-):
-    # Read the CSV using tab separator and handle non-numeric reference
-    df = pd.read_csv(path, sep='\t', comment='#')
-    df.columns = [c.strip() for c in df.columns]  # Clean up column names
-
-    z = df["Redshift (z)"].values.astype(float)
-    Hz_obs = df["Hubble Parameter H(z) (km/s/Mpc)"].values.astype(float)
-    Hz_err = df["Uncertainty σH (km/s/Mpc)"].values.astype(float)
-
-    # Model prediction
-    Hz_model = Hz_from_model(z, model_function, Hubble=H0)
-
-    # Chi² and MSE
-    chi2, mse = calculate_chi2_Hz(Hz_obs, Hz_err, Hz_model)
-
-    # Prepare comparison table
-    comparison_df = pd.DataFrame({
-        "z": z,
-        "Hz_obs": Hz_obs,
-        "Hz_err": Hz_err,
-        "Hz_model": Hz_model,
-        "residual": Hz_obs - Hz_model
-    })
-
-    metrics_df = pd.DataFrame({
-        "z": ["chi2_total", "mse_total"],
-        "Hz_obs": [chi2, mse],
-        "Hz_err": [None, None],
-        "Hz_model": [None, None],
-        "residual": [None, None]
-    })
-
-    combined_df = pd.concat([comparison_df, metrics_df], ignore_index=True)
-    combined_df.to_csv(output_csv, index=False)
-    print(f"Saved comparison to {output_csv}")
-
-def check_or_generate_Hz_comparison(
-    csv_path="evidence/rdm_Hz_comparison.csv",
-    data_path="evidence/hubble_observations.csv",
-    model_function=None,
-    H0= Hubble_H0,
-    plot_path="evidence/Hz_comparison_plot.png"
-):
-    # Si no existe, lo generamos
-    if not os.path.exists(csv_path):
-        print(f"{csv_path} not found. Generating from observational data...")
-        load_and_compare_Hz_observations(
-            path=data_path,
-            model_function=model_function,
-            output_csv=csv_path,
-            H0=H0
-        )
-    else:
-        print(f"{csv_path} found. Generating plot...")
-
-    # read csv
-    df = pd.read_csv(csv_path)
-    df = df[pd.to_numeric(df["z"], errors="coerce").notnull()].copy()
-    df["z"] = df["z"].astype(float)
-
-    # Plot graphs observational vs models
-    plt.figure(figsize=(10, 6))
-    plt.errorbar(df["z"], df["Hz_obs"], yerr=df["Hz_err"], fmt='o', label='Observed H(z)', capsize=4)
-    plt.plot(df["z"], df["Hz_model"], label='Model Prediction DK-RD2', linestyle='--')
-    plt.xlabel("Redshift z")
-    plt.ylabel("H(z) [km/s/Mpc]")
-    plt.title("Hubble Expansion Rate: Observations vs DK-RD2 Model")
+    plt.title("Expansion History H(z): DK-RD2 vs Observations")
     plt.legend()
     plt.grid(True)
-    plt.savefig(plot_path)
-    plt.close()
-    print(f"Plot saved to {plot_path}")
+    plt.figtext(0.5, 0.05, f'Figure: {os.path.basename(plot_path)} | Source: {git_gabe}',
+                ha='center', va='center', fontsize=9, color='navy')
+    plt.tight_layout(rect=(0, 0.08, 1, 0.95))
+
+    os.makedirs(os.path.dirname(plot_path), exist_ok=True)
+    plt.savefig(plot_path, dpi=300)
+    print(f"[✓] Saved plot to {plot_path}")
+    plt.show()
 
 def load_and_compare_SN_Pantheon_dataset(path, model_function, output_csv):
     """
@@ -922,12 +866,6 @@ def process_and_plot_SN_comparison(input_dat, csv_output_path, plot_output_path,
     plt.show()
     return csv_labeled_output
 
-import pandas as pd
-import matplotlib.pyplot as plt
-
-import pandas as pd
-import matplotlib.pyplot as plt
-
 def figure_sigma10(real_data_path):
     """
     Generates Figure 06 (Horizontal Format):
@@ -990,7 +928,7 @@ def figure_sigma10(real_data_path):
              ha='center', fontsize=10, color='black')
 
     # === Save and show ===
-    plt.tight_layout(rect=[0, 0.06, 1, 0.91])  # Leave space for bottom text
+    plt.tight_layout(rect=(0.0, 0.06, 1.0, 0.91))
     plt.savefig(output_path, dpi=300)
     plt.show()
 
@@ -998,6 +936,10 @@ def figure_sigma10(real_data_path):
     return output_path
 
 if __name__ == '__main__':
+    import os
+    # Ensure the 'evidence' directory exists
+    os.makedirs("evidence", exist_ok=True)
+
     # Observational Data Files
     pantheon_data = "data/Pantheon+SH0ES.dat" # Pantheon+_Data/4_DISTANCES_AND_COVAR/Pantheon+SH0ES.dat
     # https://github.com/PantheonPlusSH0ES/DataRelease/blob/main/Pantheon%2B_Data/4_DISTANCES_AND_COVAR/Pantheon%2BSH0ES.dat
@@ -1005,6 +947,9 @@ if __name__ == '__main__':
     cmb_data= "data/COM_PowerSpect_CMB-TT-full_R3.01.txt"
     pantheon_output_csv= "evidence/rdm_SN_comparison.csv"
     # out_shoes = "evidence/rdm_SN_comparison_labeled.csv"
+    hz_data_path = "data/hubble_observations.csv"  # Observational Hubble H(z) data
+    hz_csv_out = "evidence/rdm_Hz_comparison.csv"  # Output CSV with model vs data
+    hz_plot_out = "evidence/Hz_comparison_plot.png"  # Output figure for publication
 
     file_evid1, sn_colors_file = generate_figure01()
     print(f"✔️ Figure Relative Variation (%) as a Function of Relativistic Velocity and Temperature saved as\n: {file_evid1}")
@@ -1032,7 +977,19 @@ if __name__ == '__main__':
     print(f"✔️ Figure Einstein Radius Comparison Table saved as: {fig5_vals[0]}")
     print(f"📄 Table saved as: {fig5_vals[1]}")
 
-   # Try to load DK-RD2 result column intelligently
+    # === Hubble Expansion History Comparison (H(z)) ===
+    # This routine compares the predicted Hubble parameter H(z)
+    # from the DK-RD2 model with actual observational data,
+    # and generates both a comparison CSV and a figure.
+
+    optimized_Hz_comparison(
+        hz_data_path,       # Observational Hubble H(z) data
+        hz_csv_out,         # Output CSV with model vs data
+        hz_plot_out,        # Output Plot Figure with model vs data
+        E_Relativistic      # DK-RD2 expansion rate function
+    )
+
+    # Try to load DK-RD2 result column intelligently
     sn_df = pd.read_csv(fig2_vals[1])
     cmb_df = pd.read_csv(fig3_vals[1])  # DK-RD2_table_03.csv
     dm_df = pd.read_csv(fig4_vals[1])  # DK-RD2_table_04.csv

@@ -73,11 +73,17 @@ import inspect
 import numpy as np
 from scipy.integrate import quad
 
+################################################################################
+# GitHub link for visual reference in plots
+git_gabe = "https://github.com/gabemdelc/Relativistic_dynamics"
+################################################################################
+
 # === UNIVERSAL PHYSICAL CONSTANTS ===
 G0 = 6.67430e-11        # Newton's gravitational constant [m³ kg⁻¹ s⁻²]
 c_light = 2.99792458e8  # Speed of light [m/s]
 c_km_s = c_light / 1000  # Speed of light converted to [km/s]
 T_fixed = 2.725         # Current average CMB temperature [K] (Planck 2018)
+rest_wavelength = 1216  # Angstroms (Ly-alpha)
 
 # === COSMOLOGICAL PARAMETERS ===
 Hubble_H0 = 70.0        # Hubble constant [km/s/Mpc] (standard value)
@@ -109,11 +115,6 @@ Relation:
 Motivation:
     ℓ ≈ 3000 corresponds roughly to z ≈ 1 in standard cosmological mappings.
 """
-
-################################################################################
-# GitHub link for visual reference in plots
-git_gabe = "https://github.com/gabemdelc/Relativistic_dynamics"
-################################################################################
 
 """ ##############################################################
             === Global relativistic functions ===
