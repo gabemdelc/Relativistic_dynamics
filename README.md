@@ -1,3 +1,9 @@
+<p align="center">
+  <img src="poster.png" width="600"/>
+</p>
+
+> *"A physical derivation of cosmic acceleration from relativistic thermodynamic gravity — without dark energy."*
+
 # 🌌 Relativistic Dynamics — The DK-RD2 Cosmological Model
 
 Welcome to the official repository of **DK-RD2** — a revolutionary cosmological framework that explains the accelerated expansion of the universe without invoking dark energy or dark matter.
