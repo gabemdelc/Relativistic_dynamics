@@ -51,7 +51,11 @@ It does all this **with no free parameters** — just physics, the way it should
 
 You can run the full model locally or on Google Colab:
 
-- ▶️ **[Open in Google Colab](https://colab.research.google.com/github/gabemdelc/Relativistic_dynamics/blob/main/DK-RD2/DK-RD2.ipynb)**  
+⚠️ **Colab notebook temporarily disabled due to runtime issues. Will be re-enabled soon.**
+
+<!-- 
+▶️ **[Open in Google Colab](https://colab.research.google.com/github/gabemdelc/Relativistic_dynamics/blob/main/DK-RD2/DK-RD2.ipynb)** 
+-->
 - 💾 **[Browse the code in `DK-RD2/`](DK-RD2/)**
 
 It generates:
