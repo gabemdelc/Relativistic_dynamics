@@ -39,8 +39,8 @@ You can regenerate them by executing the model.
 - **Figure 04**: [Angular power spectrum vs CMB (Planck data)](DK-RD2/evidence/DK-RD2_image_03.jpg)
 - **Figure 05**: [Emergent dark matter via Gab(T,v) relativistic enhancement](DK-RD2/evidence/DK-RD2_image_04.jpg)
 - **Figure 06**: [Einstein radius comparison (ΛCDM vs DK-RD2)](DK-RD2/evidence/DK-RD2_image_05.jpg)
-- **Figure 07**: [Global RIP summary – SNe, CMB, Dark Matter, χ², and MSE](DK-RD2/evidence/DK-RD2_RIP_full_summary.jpg)
-- **Figure 08**: [Statistical comparison (χ² + MSE) across models](DK-RD2/evidence/DK-RD2_image_06.jpg)
+- **Figure 07**: [Global RIP summary – SNe, CMB, Dark Matter, χ², and MSE](DK-RD2/evidence/DK-RD2_image_07.jpg)
+- **Figure 08**: [χ² and MSE comparison bar chart (combined validation)](DK-RD2/evidence/DK-RD2_image_08.jpg)
 - **Figure 09**: [Sigma 10 validation – DK-RD2 matches ΛCDM precision without Λ or dark matter](DK-RD2/evidence/DK-RD2_Sigma10_validation_real.jpg)
 
 ---
@@ -59,13 +59,13 @@ You can regenerate them by executing the model.
 |--------------------------------------------------|------------------------------------------------|
 | ![DarkMatter](evidence/DK-RD2_image_04.jpg)      | ![Einstein](evidence/DK-RD2_image_05.jpg)      |
 
-| **Global RIP Summary (SNe, CMB, DM, χ²+MSE)**   |
-|--------------------------------------------------|
-| ![RIP Summary](evidence/DK-RD2_RIP_full_summary.jpg) |
-
-| **χ² + MSE Comparison (Figure 06)**             | **Sigma 10 Validation**                        |
+| **Global RIP Summary (SNe, CMB, DM, χ²+MSE)**   | **Combined χ² and MSE Comparison**             |
 |--------------------------------------------------|------------------------------------------------|
-| ![Figure 06](evidence/DK-RD2_image_06.jpg)       | ![Sigma10](evidence/DK-RD2_Sigma10_validation_real.jpg) |
+| ![RIP](evidence/DK-RD2_image_07.jpg)             | ![χ²](evidence/DK-RD2_image_08.jpg)            |
+
+| **Sigma 10 Validation (Figure 09)**             |
+|--------------------------------------------------|
+| ![Sigma10](evidence/DK-RD2_Sigma10_validation_real.jpg) |
 
 🖼️ These figures are auto-generated and illustrate DK-RD2’s fit to real cosmological data.
 
@@ -85,32 +85,5 @@ All outputs are in `evidence/`
 cd DK-RD2
 python3 DK-RD2.py
 
-## 🚀 Want to try it?
-
-You can run the full model locally or on Google Colab:
-
-- ▶️ **[Open in Google Colab](https://colab.research.google.com/github/gabemdelc/Relativistic_dynamics/blob/main/DK-RD2/DK-RD2.ipynb)**  
-- 💾 **[Browse the code in `DK-RD2/`](DK-RD2/)**
-
-It generates:
-- All scientific plots
-- Chi² and MSE stats
-- Emergent dark matter maps
-- RIP summary of ΛCDM 🚬
-
-👋 Contact
-
-Author: GabE=mc²
-GitHub: gabemdelc
-Email: gabemdelc@gmail.com
-
-✨ Signature Insight
-
-Physics is not invented — it's verified.—
-GabE=mc² & Luludns = ∞Ψ
-
-🕒 License
-
-This project is licensed under the MIT License. Free to use, adapt, and share with attribution.
 
 
