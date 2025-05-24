@@ -125,4 +125,19 @@ Relativistic_dynamics/
 │   ├── data/             # Public datasets (SN, CMB)
 ├── legacy_models/        # Archived previous versions
 │   └── ...               # Older scripts and notebooks
+## 📦 Reproducibility and Access
+
+All figures, tables, and statistical results presented in the DK-RD²M paper — including DESI DR1 validation, Planck comparison, and the dynamic emergence of dark matter — are **fully reproducible** from source.
+
+The main script `DK-RD2.py` performs:
+- Simulation from first principles (no free parameters)
+- Comparison vs ΛCDM
+- DESI zmtl residuals and χ²/RMSE
+- Generation of publication-ready plots (Figures 1–10)
+
+To execute:
+
+```bash
+python3 DK-RD2.py
+
 └── README.md             # This file
