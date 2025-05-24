@@ -644,6 +644,7 @@ def generate_global_summary(g_stats_sn, g_stats_cmb, g_stats_dm):
             ha='center', va='center', family='monospace')
 
     summary_image = generate_evidence("image", 6)
+    summary_csv = generate_evidence("table", 6)
     plt.savefig(summary_image, dpi=300, bbox_inches='tight')
     plt.close()
 
@@ -653,7 +654,6 @@ def generate_global_summary(g_stats_sn, g_stats_cmb, g_stats_dm):
         "Chi²_Total": [total_chi2_LCDM_DES, total_chi2_RDM_DES, total_chi2_RDM_Planck],
         "MSE_Total": [total_mse_LCDM_DES, total_mse_RDM_DES, total_mse_RDM_Planck]
     })
-    summary_csv = generate_evidence("table", 6)
     summary_table.to_csv(summary_csv, index=False)
 
     return summary_image, summary_csv
@@ -1062,10 +1062,10 @@ start_time = time.time()
 # === CONFIGURATION ===
 # Define paths for input FITS and output evidence artifacts
 fits_folder = "data/DESI/DESI_TILES"                     # Location of downloaded DESI ZMTL files
-output_csv = generate_evidence("table", 1)               # Output CSV with validated z, μ values
-residual_plot = generate_evidence("image", 1)            # Residual scatter plot output
-rmse_curve_plot = generate_evidence("image", 2)          # RMSE trajectory plot
-stats_json = generate_evidence("json", 1)                # JSON file for χ², RMSE stats
+output_csv = generate_evidence("table", 7)               # Output CSV with validated z, μ values
+residual_plot = generate_evidence("image", 7)            # Residual scatter plot output
+rmse_curve_plot = generate_evidence("image", 8)          # RMSE trajectory plot
+stats_json = generate_evidence("json", 8)                # JSON file for χ², RMSE stats
 
 # === STEP 1: Read FITS ZMTL files and track RMSE growth ===
 z_data = []       # Will hold (z, μ_obs) values
