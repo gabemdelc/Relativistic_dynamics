@@ -539,6 +539,8 @@ def generate_evidence(evidence_type, consecutive=None, ext="", out_dir="evidence
         extension = "csv"
     elif evidence_type == "data":
         extension = "txt"
+    elif evidence_type == "json":
+        extension = "json"
     else:
         extension = ext
         # prefix = evidence_type if evidence_type else program_name

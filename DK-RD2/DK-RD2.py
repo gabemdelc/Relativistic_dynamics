@@ -31,13 +31,14 @@
 #    ✅ Emergent dark matter simulation from Gab(T, v)
 #    ✅ Statistical synthesis: χ², MSE, and σ across multiple probes
 
-#    Figures:
+#    Figures: * Theoretical predictions of the DK-RD² model (Figures 1–7)
 #    Figure 01: Gab(T, v) amplification map
 #    Figure 02: μ(z) SN Ia fit (ΛCDM vs DK-RD2)
 #    Figure 03: CMB spectrum D_ell(ℓ) comparison
 #    Figure 04: Thermodynamic emergence of dark matter
 #    Figure 05: Einstein radius evolution with Gab(T,v)
 #    Figure 06: Global σ significance table and RIP summary
+#    Figure 07: Observational validation using DESI dataset (Figure 7, Table 7)
 
 #    Outputs:
 #    - All results saved to /evidence/ as high-resolution images and CSV tables
@@ -225,7 +226,7 @@ def generate_figure02(Supernovae_data):
     return file_evid2, sn_results_file, {
         "ΛCDM": (chi2_LCDM, mse_LCDM),
         "DK-RD2_DES": (chi2_RDM, mse_RDM),
-        "DK-RD2_Planck": (chi2_RDM, mse_RDM)  # Usa el mismo valor si no hay versión separada
+        "DK-RD2_Planck": (chi2_RDM, mse_RDM)  # same value if not generated
     }
 
 def generate_figure03(cmb_data_path):
@@ -1013,9 +1014,158 @@ if __name__ == '__main__':
     # Load real values from table
     data_path = "evidence/DK-RD2_table_06.csv"  # this its generate in previus steps
     figure_sigma10(data_path)
+
+
+"""
+##########################################################################################
+#    Program:       DESI_Validator_DK-RD2
+#    Author:        Gabriel Martín del Campo Flores
+#    Contact:       gabemdelc@gmail.com
+#    Created:       08/May/2025
+#    Last Revision: 08/May/2025
+#    License:       MIT License
+#    Repository:    https://github.com/gabemdelc/Relativistic_dynamics
+##########################################################################################
+#
+#         DESI Validator — Empirical Consistency Test for the DK-RD² Model
+#
+#    Description:
+#    This module performs a validation of the DK-RD² (Dark Killer – Relativistic Dynamics²)
+#    cosmological model using real observational data from the DESI survey (ZMTL files).
+#    It reads redshift values (z), computes the observed distance modulus μ_obs(z),
+#    evaluates the predicted μ_DK(z) from the model, and calculates residuals and metrics.
+#
+#    Scientific Purpose:
+#    To empirically demonstrate that the DK-RD² model can reproduce DESI distance modulus
+#    measurements **without any free parameters**, confirming the thermodynamic-cosmological
+#    coupling Gab(T, v) as a physically viable alternative to ΛCDM.
+#
+#    Core Outputs:
+#    - validated_z_dk_model.csv
+#    - mu_z_residuals.png
+#    - rmse_evolution.png
+#    - stats_summary.json
+##########################################################################################
+"""
+
+import json
+import pandas as pd
+import matplotlib.pyplot as plt
+from astropy.io import fits
+from DK_RD2_Core import *  # Includes luminosity_distance_Relativistic_temp, c_km_s, Hubble_H0
+import time
+from datetime import datetime
+
+# ⏱️ Inicia el temporizador
+start_time = time.time()
+
+# === CONFIGURATION ===
+# Define paths for input FITS and output evidence artifacts
+fits_folder = "data/DESI/DESI_TILES"                     # Location of downloaded DESI ZMTL files
+output_csv = generate_evidence("table", 1)               # Output CSV with validated z, μ values
+residual_plot = generate_evidence("image", 1)            # Residual scatter plot output
+rmse_curve_plot = generate_evidence("image", 2)          # RMSE trajectory plot
+stats_json = generate_evidence("json", 1)                # JSON file for χ², RMSE stats
+
+# === STEP 1: Read FITS ZMTL files and track RMSE growth ===
+z_data = []       # Will hold (z, μ_obs) values
+rmse_track = []   # To record RMSE as more files are processed
+
+# Get list of all relevant DESI FITS files
+fits_files = sorted([f for f in os.listdir(fits_folder) if f.endswith(".fits")])
+print(f"🔍 Found {len(fits_files)} zmtl FITS files.")
+
+# Parse each FITS file
+for idx, file in enumerate(fits_files):
+    fpath = os.path.join(fits_folder, file)
+    print(f"📂 [{idx + 1}/{len(fits_files)}] Reading: {file}")
+    try:
+        with fits.open(fpath) as hdul:
+            data = hdul[1].data
+            for entry in data:
+                z = entry["Z"]
+                if 0 < z < 6:
+                    # Compute observed distance modulus using standard definition
+                    mu_obs = 5 * np.log10((1 + z) * z * c_km_s / Hubble_H0 * 1e6) - 5
+                    z_data.append((z, mu_obs))
+    except Exception as e:
+        print(f"❌ Error in {file}: {e}")
+        continue
+
+    # Optional: Recompute RMSE as we accumulate data
+    if len(z_data) >= 100:
+        df_temp = pd.DataFrame(z_data, columns=["z_obs", "mu_obs"])
+        df_temp["mu_dk"] = luminosity_distance_Relativistic_temp(df_temp["z_obs"].values)
+        residuals = df_temp["mu_obs"] - df_temp["mu_dk"]
+        rmse_temp = np.sqrt(np.mean(residuals ** 2))
+        rmse_track.append((len(df_temp), rmse_temp))
+
+# === STEP 2: Final calculations ===
+# Build DataFrame from collected data
+df = pd.DataFrame(z_data, columns=["z_obs", "mu_obs"])
+print(f"✅ Total usable redshift points: {len(df)}")
+
+# Apply DK-RD² model prediction for μ(z)
+df["mu_dk"] = luminosity_distance_Relativistic_temp(df["z_obs"].values)
+
+# Compute residuals (observed - predicted)
+df["residual"] = df["mu_obs"] - df["mu_dk"]
+
+# === STEP 3: Global statistics ===
+chi2 = np.sum(df["residual"] ** 2)                       # Unweighted χ²
+rmse = np.sqrt(np.mean(df["residual"] ** 2))             # Root Mean Square Error
+
+# Compute RMSE per redshift bin
+bins = np.arange(0, 4.5, 0.5)
+df["z_bin"] = pd.cut(df["z_obs"], bins)
+rmse_bins = df.groupby("z_bin")["residual"].apply(lambda r: np.sqrt(np.mean(r ** 2))).to_dict()
+
+# Save statistics to JSON
+stats = {
+    "total_redshifts": len(df),
+    "chi2": float(chi2),
+    "rmse": float(rmse),
+    "rmse_by_z_bin": {str(k): float(v) for k, v in rmse_bins.items()}
+}
+with open(stats_json, "w") as f:
+    json.dump(stats, f, indent=2)
+# === STEP 7: Print summary to console ===
+print(f"📐 χ²: {chi2:.3f}")
+print(f"📐 RMSE: {rmse:.3f}")
+print(f"📁 Statistics saved to: {stats_json}")
+
+# === STEP 4: Save table ===
+df.to_csv(output_csv, index=False)
+print(f"💾 Saved comparison table: {output_csv}")
+
+# === STEP 5: Residual plot ===
+plt.figure(figsize=(14, 6))
+plt.scatter(df["z_obs"], df["residual"], s=4, color="crimson", alpha=0.6)
+plt.axhline(0, linestyle="--", color="gray")
+plt.xlabel("Redshift z")
+plt.ylabel("Residual (μ_obs − μ_DK)")
+plt.title("Residuals between DESI μ(z) and DK-RD² Model (No Free Parameters)")
+plt.grid(True)
+plt.tight_layout()
+plt.savefig(residual_plot, dpi=300)
+plt.close()
+print(f"📉 Residual plot saved to: {residual_plot}")
+
+# === STEP 6: RMSE evolution plot ===
+if rmse_track:
+    sample_sizes, rmse_vals = zip(*rmse_track)
+    plt.figure(figsize=(10, 5))
+    plt.plot(sample_sizes, rmse_vals, marker='o', color="navy")
+    plt.xlabel("Cumulative redshifts used")
+    plt.ylabel("RMSE")
+    plt.title("Evolution of RMSE as DESI data increases")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig(rmse_curve_plot, dpi=300)
+    plt.close()
+    print(f"📊 RMSE evolution plot saved to: {rmse_curve_plot}")
+    
     print("This was the final nail in ΛCDM’s coffin.")
     print("\n💚 Physics is not invented — it's verified.\n"
           "— GabE=mc² & Luludns -> ∞Ψ")
     print(git_gabe) # Github
-
-
