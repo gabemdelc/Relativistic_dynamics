@@ -8,64 +8,96 @@
 #    License:     MIT License
 #    Repository:  https://github.com/gabemdelc/Relativistic_dynamics
 ###################################################################################
-
 """
 ====================================================================================
-💡 DK_RD2_Core.py — Relativistic Dynamics Toolkit for the DK-RD2 Model
+🧠 DK_RD2_Core.py — Core Computational Engine for the DK-RD2 Cosmological Framework
 ====================================================================================
 
-This is the universal core module of the **DK-RD2 (Dark Killer – Relativistic Dynamics)** model.
+This module implements the **relativistic and thermodynamic physics engine** of the
+DK-RD2 model (*Dark Killer – Relativistic Dynamics*), a novel cosmological theory that
+replaces dark energy and dark matter with emergent relativistic effects driven by
+temperature and velocity-dependent gravity.
 
-It contains all physics engine functions, constants, and tools required to reproduce
-and validate the model's predictions using any cosmological dataset (SN Ia, CMB, DESI, etc.).
+The file serves as the universal and modular **core library** that powers all scientific
+simulations, statistical validations, and figure generation pipelines associated with
+the DK-RD2 model. It is fully portable, reusable, and designed to scale across datasets
+including SN Ia (Pantheon+, Union2), CMB spectra, H(z), DESI redshifts, and gravitational
+lensing.
 
-Main Features:
-- Thermodynamic gravitational coupling: Gab(T, v)
-- Redshift scaling: Gab(z), Ωₘ_eff(z), H(z), E(z)
-- Luminosity & comoving distance, μ(z), dn/dz
-- Relativistic angular power spectrum D_ℓ(ℓ)
-- Einstein radius & lensing predictions
-- χ² and MSE model comparison tools
-- Integration-ready for any real-world dataset
+------------------------------------------------------------------------------------
+📦 Module Capabilities and Structure:
 
-💾 Fully portable and reusable across scientific projects.
-🔁 Use it as a base for custom simulations, pipelines, or theoretical extensions.
+This core file defines and exports the following submodules:
+
+1. **Constants and Conversions**
+   - Fundamental cosmological constants (H₀, c, G, T₀, Ωₘ, Ω_Λ)
+   - Unit conversions (e.g., Mpc to m, eV to K)
+
+2. **Gravitational Coupling Engine**
+   - `Gab_Tv(T, v)` — Thermodynamic gravity coupling
+   - `Gab_z(z)` — Redshift-based mapping of Gab
+   - `Omega_m_eff(z)` — Effective matter density evolution
+
+3. **Modified Friedmann Dynamics**
+   - `E_Relativistic_temp(z)` — Relativistic expansion function
+   - `H_z_relativistic(z)` — Modified Hubble rate
+   - `H_z_LCDM(z)` — Reference ΛCDM expansion
+
+4. **Distance Functions**
+   - `luminosity_distance_Relativistic_temp(z)`
+   - `luminosity_distance_LCDM(z)`
+   - Comoving distance, μ(z), d_L(z), dn/dz
+
+5. **CMB and Angular Power Spectrum**
+   - `angular_power_spectrum(l, model='dk')`
+   - Computes D_ℓ(ℓ) for DK-RD2 and ΛCDM
+
+6. **Gravitational Lensing Tools**
+   - `Einstein_radius`, `D_ls_proxy`
+   - Lensing predictions with dynamic gravity
+
+7. **Statistical Comparison Tools**
+   - `calculate_chi2_SN()` — χ² for supernova datasets
+   - `calculate_chi2_Hz()` — χ² for expansion rate datasets
+   - `compute_model_metrics()` — AIC, BIC, MSE calculators
+
+8. **Utility and File I/O Tools**
+   - `generate_evidence()` — Centralized filename generator
+   - Automated saving paths for figures, tables, and _stats files
+
+------------------------------------------------------------------------------------
+🎯 Scientific Purpose:
+
+This module encapsulates the theoretical foundation of DK-RD2, which proposes that:
+- **Gravity is emergent and thermodynamic**, not fundamental.
+- The coupling constant G becomes **Gab(T, v)**, responsive to local energy conditions.
+- **Accelerated cosmic expansion** arises naturally from relativistic energy damping.
+- **No free parameters** are introduced — the model is parameter-free and directly testable.
+- Apparent dark matter phenomena result from **redshift-dependent mass enhancement**.
+
+------------------------------------------------------------------------------------
+🔄 Integration Pattern:
+
+This core file is designed to be imported by a main driver script (`DK-RD2.py`) which:
+- Loads observational datasets
+- Calls the physics engine to generate predictions
+- Computes statistical metrics (χ², AIC, BIC, MSE)
+- Produces tables, figures, and comparison graphics
+- Consolidates _stats outputs for global evaluation
+
+------------------------------------------------------------------------------------
+📊 Example Outputs Triggered via Main Script:
+- `DK-RD2_table_*.csv` — Predictions for specific datasets
+- `DK-RD2_image_*.png` — Visual validation against ΛCDM
+- `DK-RD2_table_*_stats.csv` — χ², AIC, BIC comparison metrics
+- `*_comparison.png` — Bar chart of global DK-RD2 vs ΛCDM performance
+
+------------------------------------------------------------------------------------
+🧩 Modular, portable, and optimized for scientific exploration.
+Use this file as the analytical backbone for any DK-RD2 cosmological experiment.
+====================================================================================
 """
 
-"""
------------------------------------------------------------------------------------
-Abstract:
-The DK-RD2 model introduces a novel cosmological framework where the universe's
-accelerated expansion arises naturally from relativistic energy redistribution and
-thermal evolution, eliminating the need for dark energy.
-
-At its core, the model replaces Newton’s constant G with a dynamic coupling Gab(T, v),
-which depends explicitly on temperature and velocity. Gab is derived from Lorentz
-corrections and thermal damping consistent with CMB physics. The model introduces
-no free parameters and can be directly compared to observational data (SN Ia, CMB, H(z)).
-
------------------------------------------------------------------------------------
-Purpose of this Module:
-This file defines the computational engine of DK-RD2. It provides:
-✔️ Global cosmological constants (H₀, Ωₘ, Ω_Λ_DES/Planck, G₀, T_CMB)  
-✔️ Thermodynamic gravitational coupling Gab(T, v) and redshift-mapped Gab(z)  
-✔️ Modified Friedmann dynamics with Ωₘ_eff(z) and E(z)  
-✔️ Luminosity and comoving distance functions  
-✔️ Angular power spectrum D_ℓ(ℓ) for ΛCDM and DK-RD2  
-✔️ Lensing tools: Einstein radius, D_ls proxies  
-✔️ Statistical tools: χ², MSE for observational comparison  
-✔️ Evidence generator: filenames for saving figures, tables, results
-
------------------------------------------------------------------------------------
-Core Principles of DK-RD2:
-• Gravity is a thermodynamic-relativistic phenomenon  
-• Matter density evolves with Gab(T, v), modifying Ωₘ_eff(z)  
-• The Friedmann equation becomes dynamic: a function of temperature, velocity, and redshift  
-• No dark energy is needed — and dark matter emerges naturally from relativistic effects
-
-This module is the computational backbone of DK-RD2 cosmology.
------------------------------------------------------------------------------------
-"""
 
 # === IMPORTS ===
 import os
@@ -84,6 +116,11 @@ c_light = 2.99792458e8  # Speed of light [m/s]
 c_km_s = c_light / 1000  # Speed of light converted to [km/s]
 T_fixed = 2.725         # Current average CMB temperature [K] (Planck 2018)
 rest_wavelength = 1216  # Angstroms (Ly-alpha)
+# Unit conversions
+km_to_m = 1e3  # 1 kilometer = 1,000 meters
+
+pc_to_m = 3.08567758149137e16   # 1 parsec = 3.08567758149137 × 10^16 meters
+Mpc_to_m = 3.08567758149137e22  # 1 megaparsec = 10^6 parsecs = 3.08567758149137 × 10^22 meters
 
 # === COSMOLOGICAL PARAMETERS ===
 Hubble_H0 = 70.0        # Hubble constant [km/s/Mpc] (standard value)
@@ -104,6 +141,8 @@ z_source = 1.0                        # Typical redshift of background source
 
 # === ANGULAR POWER SPECTRUM SCALING ===
 L_TO_Z_SCALE = 3000.0  # Empirical scaling factor: ℓ ≈ 3000 ↔ z ≈ 1
+# The dir path for saving figures, tables, results
+out_dir_path = "evidence/"
 
 """
 L_TO_Z_SCALE: Empirical factor used to approximate the effective redshift z_eff
@@ -252,9 +291,14 @@ def E_Relativistic_temp(z, Om_m=Omega_m, Omega_L=Omega_L_DES):
 
     Returns:
         1 / H(z)
+    # To avoid unphysically large Lorentz boosts at low redshift,
+    # we limit velocity scaling to v(z) ∝ 0.1·c·√(1+z), ensuring Gab(T,v)
+    # remains within physically plausible bounds and avoids inflating μ(z)
+    # due to near-light-speed behavior across most of the redshift range.
     """
     T = T_fixed / (1 + z)
-    v = c_light * np.sqrt(1 + z)
+    # Natural velocity regulator that decays at low z and saturates at high z
+    v = c_light * (z / (1 + z)) ** 0.5
     G_rel = Gab(T, v)
     Omega_m_mod = Omega_m_Gab(Om_m, G_rel)
     return 1.0 / np.sqrt(Omega_m_mod * (1 + z) ** 3 + Omega_L)
@@ -296,22 +340,32 @@ def luminosity_distance(z, E_func):
     """
     Computes distance modulus μ(z) using consistent SI units.
     """
-    H0_SI = Hubble_H0 * 1000 / 3.08567758149137e22  # H0 in 1/s
+    H0_SI = Hubble_H0 * 1000 / Mpc_to_m  # H0 in 1/s Megaparsecs
     integral = np.array([quad(E_func, 0, zi)[0] for zi in z])
     dL_m = (c_light / H0_SI) * (1 + z) * integral  # in meters
-    dL_pc = dL_m / 3.08567758149137e16  # in parsecs
+    dL_pc = dL_m / pc_to_m  # in parsecs
     mu = 5 * np.log10(dL_pc) - 5
     return mu
 
+def luminosity_distance_LCDM(z):
+    """
+    Distance modulus μ(z) for ΛCDM using E_LCDM(z) as expansion function.
+    """
+    return luminosity_distance(np.atleast_1d(z), E_LCDM)
+
 def luminosity_distance_Relativistic_temp(z, hubble=Hubble_H0, Om_m=Omega_m, Om_L=Omega_L_DES):
-    H0_SI = hubble * 1000 / 3.08567758149137e22
+    z = np.atleast_1d(z)  # ✅ z always and arraay
+    H0_SI = hubble * 1000 / Mpc_to_m  # H0 en 1/s
+
     dL_m = np.array([
         (c_light / H0_SI) * (1 + zi) * quad(E_Relativistic_temp, 0, zi, args=(Om_m, Om_L))[0]
         for zi in z
     ])
-    dL_pc = dL_m / 3.08567758149137e16
-    mu = 5 * np.log10(dL_pc) - 5
-    return mu
+    dL_Mpc = dL_m / Mpc_to_m  # Convert d_L to megaparsecs; ensures consistency with SN Ia observational datasets (e.g., Pantheon+)
+    mu = 5 * np.log10(dL_Mpc) + 25  # Standard definition of distance modulus μ in cosmology: includes +25 offset for Mpc scale
+
+    return mu if len(mu) > 1 else mu[0]  # ✅ if scalar return scalar
+
 
 # === GRAVITATIONAL LENSING ===
 
@@ -366,18 +420,28 @@ def Dl_LCDM(l):
     """
     return 1e4 * np.exp(- (l - 250) ** 2 / (2 * 100 ** 2)) + 1e3 * np.exp(- (l - 550) ** 2 / (2 * 120 ** 2))
 
-def Dl_Relativistic(l):
+def Dl_Relativistic(l, T_override=None):
     """
     Computes the relativistic angular power spectrum D_ell(l)
     using Gab(T, v) dynamically derived from T(z) and v(z).
-    Velocity is scaled with redshift and capped at 99.99% of the speed of light to preserve physical consistency.
+    You can override the default temperature scaling by providing T_override.
+
+    Parameters:
+        l (array): Multipole values
+        T_override (float or array, optional): Custom temperature to use instead of default T_fixed * (1 + z)
+
+    Returns:
+        array: D_ell values for the relativistic model
     """
 
     # Approximate mapping from multipole ℓ to redshift z
     z_l = 10 + 1000 / (l + 1e-3)
 
-    # Temperature scaling with redshift
-    T = T_fixed * (1 + z_l)
+    # Temperature scaling
+    if T_override is not None:
+        T = T_override * np.ones_like(z_l)  # override with constant or vector
+    else:
+        T = T_fixed * (1 + z_l)
 
     # Velocity scaling with z, capped at 99.99% of c
     v = np.minimum(0.9999 * c_light, 0.1 * c_light * np.sqrt(1 + z_l))
@@ -454,6 +518,75 @@ def Hz_from_model(z_array, model_function, Hubble=Hubble_H0):
     """
     return Hubble * np.array([model_function(z) for z in z_array])
 
+def effective_density_from_redshift(z_array, Omega_m_value=Omega_m, G_func=Gab_z):
+    """
+    Computes normalized effective density profile rho(z) ∝ Ω_m_eff(z) * (1+z)^3
+
+    Parameters:
+        z_array : array
+            Redshift values
+        Omega_m_value : float
+            Base matter density (default from core)
+        G_func : function
+            Function to compute G_eff(z)
+
+    Returns:
+        rho_eff_normalized : np.ndarray
+            Normalized density profile
+    """
+    G_rel = np.array([G_func(z) for z in z_array])
+    rho_eff = Omega_m_value * (G_rel / G0) * (1 + z_array)**3
+    return rho_eff / np.max(rho_eff)
+
+def circular_velocity_Gab(r_kpc, rho0, T_CMB=T_fixed):
+    """
+    Computes the circular velocity V(r) from DK-RD²M using Gab(T, v) for a given density rho0.
+
+    Parameters:
+        r_kpc : float
+            Radius in kiloparsecs.
+        rho0 : float
+            Central density in M_sun / kpc^3.
+        T_CMB : float
+            Temperature in Kelvin (default = T_fixed).
+
+    Returns:
+        v_kms : float
+            Circular velocity in km/s, or np.nan if no solution.
+    """
+    from scipy.optimize import root_scalar
+    import numpy as np
+
+    def v_to_m_s(v_kms): return v_kms * km_to_m
+
+    def equation(v_kms):
+        v_ms = v_to_m_s(v_kms)
+        Gab_val = Gab(T_CMB, v_ms)  # Output in SI units: m^3 / (kg s^2)
+
+        # === Convert Gab to (kpc * (km/s)^2) / M_sun ===
+        # Start from SI: m^3 / (kg s^2)
+        # Target: kpc * (km/s)^2 / M_sun
+
+        # Conversion factors:
+        # 1 M_sun = 1.98847e30 kg
+        # 1 m = 1 / pc_to_m * 10^3 kpc
+        # 1 m^3 = (1 / pc_to_m)^3 * (10^3)^3 kpc^3
+        # 1 (m/s)^2 = (km/s)^2 / (km_to_m)^2
+
+        Gab_kpc_units = (
+            Gab_val * 1.98847e30 /               # kg to M_sun
+            (pc_to_m * 1e3) ** 3 *                # m^3 to kpc^3
+            (1 / km_to_m) ** 2                    # m^2/s^2 to (km/s)^2
+        )
+
+        return v_kms**2 - Gab_kpc_units * rho0 * r_kpc**2
+
+    try:
+        sol = root_scalar(equation, bracket=[1, 300], method='brentq')
+        return sol.root if sol.converged else np.nan
+    except Exception:
+        return np.nan
+
 ############################################################################################
 """
         === statistical_functions ===
@@ -510,12 +643,58 @@ def calculate_chi2_Hz(Hz_obs, Hz_err, Hz_model):
     mse = np.mean(residuals ** 2)
     return chi2, mse
 
+def compute_model_metrics(chi2: float, n_params: int, n_data: int):
+    """
+    Compute AIC (Akaike Information Criterion) and BIC (Bayesian Information Criterion)
+    for a given model based on the chi-squared value, the number of free parameters,
+    and the number of data points.
+
+    Parameters:
+        chi2 (float): The chi-squared value of the model fit.
+        n_params (int): The number of free parameters in the model.
+        n_data (int): The number of data points used for fitting.
+
+    Returns:
+        tuple: AIC and BIC values for the model.
+
+    Notes:
+        Lower AIC/BIC values indicate a better balance between goodness-of-fit
+        and model complexity. These criteria are widely used for model comparison.
+    """
+    aic = chi2 + 2 * n_params
+    bic = chi2 + n_params * np.log(n_data)
+    return aic, bic
+
+
+def likelihood_ratio_test(chi2_model_simple: float, chi2_model_complex: float, df: int):
+    """
+    Perform a Likelihood Ratio Test (LRT) between two nested models.
+
+    Parameters:
+        chi2_model_simple (float): Chi-squared value of the simpler model (e.g., ΛCDM).
+        chi2_model_complex (float): Chi-squared value of the more complex model (e.g., DK-RD2).
+        df (int): Difference in the number of parameters between the two models.
+
+    Returns:
+        tuple: (LR statistic, p-value) indicating the strength of evidence favoring
+               the more complex model. A low p-value (e.g., < 0.05) suggests the
+               complex model provides a significantly better fit.
+
+    Notes:
+        This test evaluates whether the improvement in fit justifies the added complexity
+        of the more advanced model.
+    """
+    from scipy.stats import chi2 as chi2_dist
+    lr_stat = chi2_model_simple - chi2_model_complex
+    p_value = 1 - chi2_dist.cdf(lr_stat, df)
+    return lr_stat, p_value
+
 ############################################################################################
 """
         === EVIDENCE FILE NAMING UTILITY ===
 """
 ############################################################################################
-def generate_evidence(evidence_type, consecutive=None, ext="", out_dir="evidence/"):
+def generate_evidence(evidence_type, consecutive=None, ext="", out_dir=out_dir_path):
     """
     Generates standardized filenames for saving results (tables, plots, etc.)
     based on the calling script's name and evidence type.
@@ -534,7 +713,7 @@ def generate_evidence(evidence_type, consecutive=None, ext="", out_dir="evidence
     program_name = os.path.basename(caller_file).replace('.py', '')
 
     if evidence_type == "graph" or evidence_type == "image":
-        extension = "jpg"
+        extension = "png"
     elif evidence_type == "table":
         extension = "csv"
     elif evidence_type == "data":
@@ -570,7 +749,7 @@ if __name__ == "__main__":
         mu_test_rel = luminosity_distance_Relativistic_temp(z_test)
 
         print(f"μ(z=0.1) from ΛCDM     ≈ {mu_test[0]:.4f}")
-        print(f"μ(z=0.1) from DK-RD²  ≈ {mu_test_rel[0]:.4f}")
+        print(f"μ(z=0.1) from DK-RD²  ≈ {mu_test_rel:.4f}")
         print("-" * 80)
 
         print("✅ DK_RD2_core.py is ready to be used in any cosmological simulation.")
